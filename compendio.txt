@@ -1,0 +1,93 @@
+ATAQUE ESP8266 #1:
+
+--ABSTRACTO: Tratáse dun ataque de deautenticacíon de dispositivos conectados a un punto de acceso inalámbrico (AP)
+ no contexto dunha rede local. Aproveita a capacidade do ESP de soportar o protocolo de redes inalámbricas
+ b/g/n xunto cunha pila tcp/ip para enviar tramas de deautenticación a aqueles dispositivos asociados a un
+ AP lexítimo.
+
+--COMPOÑENTES: 
+
+		-ESP8266
+		-BATERÍA ?????
+		-RESISTENCIAS ????
+		-ANTENA ???????
+		-Software: Plataforma Deauth ( github: https://github.com/spacehuhntech/esp8266_deauther )
+		
+--DESPLEGUE DE ATAQUE:
+   O ataque é satisfactorio para interrumpir o servizo do host conectado ao AP escollido na rede de probas.
+		
+ 
+--LIMITACIÓNS: 
+   O ESP8266 so pode usar a banda de frecuencia de 2.4 Ghz* e polo tanto aquelas redes inalámbricas
+   onde os dispostivos e APs utilicen unha banda de frecuencia diferente, como a de 5 Ghz, poderían cambiarse a ela e retomar 
+   unha conectividade estable. Por outra parte, debido as limitacións de hardware do ESP8266 o ataque so se fai efectivo
+   dentro dun determinado rango*,a partir do cal empeza a perder a capacidade de interferir realmente na rede inalambrica.
+   
+--PREVENCIÓN DO ATAQUE: 
+   En primeiro lugar veremos as medidas de seguridade pasivas, como son asegurarnos que os puntos de 
+   de acceso da nosa rede inalámbrica soportan como mínimo o estandar IEE 802.11w, o cal introduce melloras de seguridade como
+   o cifrado e autenticación das tramas de control* ( entre elas a trama de deautenticación na que se basea o ataque ) usando as
+   chaves negociadas no apretón a catro mans. En resumen, se o noso está certificados con Wifi6* ou superior podemos evitar o uso
+   ilexitimo de tramas. Ou como antes mencionei evitar a banda de 2.5 Ghz pero eso resulta evidentemente máis restrictivo.
+   
+   Para a prevención activa podemos desplegar un IDS ( intrusion detection service ) na nosa rede inalámbrica pra analizar o 
+   tráfico e detectar posibles paquetes sospeitosos, como sucesivas tramas de deautenticación. O mesmo ESP8266 poderíase poñer
+   e modo promiscuo e cargalo con un programa pra detectar tramas de deautenticacíon como IDS, como se demostrou por investigadores
+   do departamento de ciberseguridade da CMR College of Engineering & Technology, Hyderabad, India. Pra probar a viabilidade de esta
+   proposta decidin cargar un programa desteas caraterísticas nun ESP8266 ????
+ 
+--DESPLEGUE DE IDS:
+   
+   Para probar mentres non exista autonomía enerxética para máis dun ESP8266 usaremos un portátil coa suite de ferramentar aircrack 
+   pra lanzar tramas de deautenticacíon sobre unha rede de probas onde un ESP8266 cargado coa Plataforma Deauth esta escoitando.
+   
+   Comando lanzado dende o equipo portatil atacante contra a MAC do AP:
+   
+   sudo aireplay-ng -0 0 -a  <MAC_AP> -c <BOGUS_MAC> -D  <interface> 
+   
+   O resultado foi que o ESP8266 detecta satisfactoriamente o ataque e asi o notifica pola interface serial.
+   
+ATAQUE ESP8266 #2:
+
+ --ABSTRACTO: O roubo de credenciais representa
+ 
+ 	https://hoxhunt.com/guide/phishing-trends-report#key-phishing-statistics-for-2025
+ 	
+ATAQUE ESP8266 #3:
+ 
+ --ABSTRACTO: O ataque de DoS lento presentase como un excelente candidato pra plataforma ESP8266 debido a demandar menos
+ 		recursos computacionais pra ser operado exitosamente. Máis alá da facilidade de implementación e do abaratado 
+ 		coste do ESP8266 este ataque vese fortalecido pola capacidade de escalar horizontalmente, é dicir, pode crearse un 
+ 		"enxame" ou rede extensa de dispositivos facilmente transportables que comprometa a dispoñibilidade dun servidor web en 
+ 		menos dun minuto. Esta proposta de ataque foi inspirada poe unha publicación do CNR-IEIITT
+ 		de Xénova, Italia. *
+--COMPOÑENTES: 
+
+		-ESP8266
+		-BATERÍA ?????
+		-RESISTENCIAS ????
+		-ANTENA ???????
+		-Software: autoría propia coa ferramenta de IA Deepseek R1
+		
+--DESPLEGUE DE ATAQUE:
+
+		Pra poder probar a efectividade do ataque levantouse unha rede privada pra facer de “laboratorio”. Nela introducíronse 
+		unha máquina Arch-Linux e outra Ubuntu, ambas co servidor web lixeiro Apache2, que será o obxectivo do ESP8266 tamén 
+		presente nesa rede. En concreto usáronse as seguintes versións nas máquinas e servidores:
+
+ 
+ **********************************POR FACER***************************************
+ 
+ --falta citar ( un * onde sexa necesario cita )
+ 	-averiguar rango efectividade esp8266 ou citar
+ 	
+ --intentar desarrolar IDS especializado en captar tramas de deautenticación
+ 	-paper con detalles: https://www.ijert.org/detect-wi-fi-de-authentication-attacks-using-esp8266
+ 	-plataforma DeauthDetecter: https://github.com/SpacehuhnTech/DeauthDetector (probar viabilidade, se funciona comprar leds).
+ 		-AVERIGUAR COMO UNIR LEDS E ENERXIA ( conexion usb ou batería )
+ 		-unha posible solución sería deixalo directamente na placa de desarrollo, pero sigue faltando o led.  
+ 		 ( ver exemplos aliexpress, palabras clave "usb type a placa pcb pines hembra" )
+ 		-fan falta os portos GND ( terra, -5V) e VBUS ( alimentación, 5V) pra que tire.
+ 
+ 
+ 

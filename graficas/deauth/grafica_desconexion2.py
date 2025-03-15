@@ -2,10 +2,8 @@ import matplotlib.pyplot as plt
 
 # Leer el log de desconexión
 def leer_log_desconexion(archivo_log):
-    tiempo_conectado = 0
-    tiempo_desconectado = 0
-    ultimo_estado = None
-    ultimo_tiempo = None
+    tiempos = []
+    estados = []
 
     with open(archivo_log, "r") as log_file:
         for linea in log_file:
@@ -16,35 +14,38 @@ def leer_log_desconexion(archivo_log):
             timestamp, estado = partes
             timestamp = int(timestamp)
 
-            if ultimo_tiempo is not None:
-                delta_tiempo = timestamp - ultimo_tiempo
-                if ultimo_estado == "Conectado":
-                    tiempo_conectado += delta_tiempo
-                elif ultimo_estado == "Desconectado":
-                    tiempo_desconectado += delta_tiempo
+            tiempos.append(timestamp)
+            estados.append(1 if estado == "Conectado" else 0)  # 1 = Conectado, 0 = Desconectado
 
-            ultimo_estado = estado
-            ultimo_tiempo = timestamp
-
-    return tiempo_conectado, tiempo_desconectado
+    return tiempos, estados
 
 # Archivo de log
 archivo_log = "log_desconexion.txt"
 
-# Leer el log y obtener los tiempos
-tiempo_conectado, tiempo_desconectado = leer_log_desconexion(archivo_log)
+# Leer el log y obtener los datos
+tiempos, estados = leer_log_desconexion(archivo_log)
 
-# Datos para la gráfica de tarta
-etiquetas = ["Conectado", "Desconectado"]
-valores = [tiempo_conectado, tiempo_desconectado]
-colores = ["green", "red"]
-explode = (0, 0.1)  # Resaltar el sector "Desconectado"
+# Normalizar los tiempos para que comiencen en 0
+tiempo_inicial = tiempos[0]
+tiempos_normalizados = [t - tiempo_inicial for t in tiempos]
 
-# Crear la gráfica de tarta
-plt.figure(figsize=(8, 6))
-plt.pie(valores, explode=explode, labels=etiquetas, colors=colores, autopct='%1.1f%%', startangle=140, shadow=True)
-plt.title("Tempo de conexión vs desconexión durante o ataque")
-plt.axis("equal")  # Para que la gráfica sea un círculo perfecto
+# Calcular la duración total del ataque
+duracion_total = tiempos_normalizados[-1]
+
+# Crear la gráfica de líneas
+plt.figure(figsize=(10, 6))
+plt.plot(tiempos_normalizados, estados, drawstyle="steps-post", color="blue", linewidth=2, label="Estado de conexión")
+
+# Personalizar la gráfica
+plt.yticks([0, 1], ["Desconectado", "Conectado"])  # Etiquetas para el eje Y
+plt.xlabel("Tempo (segundos)")
+plt.ylabel("Estado de conexión")
+plt.title(f"Estado de conexión durante o ataque (Duración total: {duracion_total} segundos)")
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend(loc="upper right")
+
+# Ajustar los límites del eje X
+plt.xlim(0, duracion_total)
 
 # Mostrar la gráfica
 plt.show()

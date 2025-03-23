@@ -4,9 +4,9 @@ Este proxecto explora posibles ataques informáticos que poden ser realizados de
 <br>
 <br>
 ![varios esp8266 montados nunhas placas de desarrolo](imaxes/xeral/esp.jpg)
-<h3 style="background-color:rgba(153, 142, 131, 0.77); padding: 10px; border-radius: 5px;">
-Ataques Explorados
-<h3>
+
+## Ataques Explorados
+
 
 ### __Ataque #1__   :         Denegación de servizo nunha rede WiFi
 
@@ -50,10 +50,10 @@ O ataque Slowloris consiste en enviar solicitudes HTTP parciais a un servidor we
 Estudarei distinas configuracións populares que un administrador dun servidor web pode levar a cabo para evitar caer antes esta de apretos. Porei aquelas máis eficaces __según meu criterio__ en práctica e comprobarei sua resilencia antes o ESP8266.
 
 ---
-<h3 style="background-color:rgba(153, 142, 131, 0.77); padding: 10px; border-radius: 5px;">
-Conclusión
-<h3>
-Este proxecto demostra como o ESP8266, un dispositivo IoT común e extramedamente [barato](https://www.aliexpress.com/w/wholesale-esp8266.html), pode ser utilizado tanto para realizar ataques informáticos como para protexer as redes e sistemas contra eles. A comprensión destes ataques e as súas solucións é fundamental nun contexto onde a relevancia do Internet das Cousas avanza a largzas zancadas.
+
+## Conclusión
+
+Este proxecto demostra como o ESP8266, un dispositivo IoT común e extramedamente [barato](https://www.aliexpress.com/w/wholesale-esp8266.html), pode ser utilizado tanto para realizar ataques informáticos como para protexer as redes e sistemas contra eles. A comprensión destes ataques e as súas solucións é fundamental nun contexto onde a relevancia do Internet das Cousas avanza a grandes zancadas.
 <br>
 <br>
 

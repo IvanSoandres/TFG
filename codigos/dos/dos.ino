@@ -14,7 +14,7 @@ void setup() {
   Serial.println(max_connections);
 
   // Conecta o ESP8266 a unha rede Wi-Fi
-  WiFi.begin("w̶i̸f̴i̷ ̵h̷a̷c̶k̷e̷r", "torturechamber"); // credenciais da wifi (literalmente poñer o nome da wifi en texto plano)
+  WiFi.begin("SSID", "password"); // credenciais da wifi 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");

